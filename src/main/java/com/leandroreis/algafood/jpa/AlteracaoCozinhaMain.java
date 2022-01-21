@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationContext;
 import com.leandroreis.algafood.AlgafoodApiApplication;
 import com.leandroreis.algafood.domain.model.Cozinha;
 
-public class BuscaCozinhaMain {
+public class AlteracaoCozinhaMain {
 	
 	public static void main(String[] args) {
 		ApplicationContext applicationContext = new SpringApplicationBuilder(AlgafoodApiApplication.class)
@@ -17,9 +17,11 @@ public class BuscaCozinhaMain {
 		
 		CadastroCozinha cadastroCozinha = applicationContext.getBean(CadastroCozinha.class);
 		
-		Cozinha cozinha = cadastroCozinha.buscar(2L);
+		Cozinha cozinha = new Cozinha();
+		cozinha.setId(1L);
+		cozinha.setNome("Brasileira");
 		
-			System.out.println(cozinha.getNome());
+		cadastroCozinha.salvar(cozinha);
 		
 	}
 
