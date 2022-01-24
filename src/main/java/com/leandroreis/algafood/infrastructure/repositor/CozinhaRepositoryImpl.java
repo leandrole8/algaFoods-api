@@ -25,13 +25,12 @@ public class CozinhaRepositoryImpl implements CozinhaRepository{
 	
 	@Transactional
 	@Override
-
 	public Cozinha salvar(Cozinha cozinha) {
 		return manager.merge(cozinha);
 	}
 
+	@Transactional
 	@Override
-
 	public Cozinha buscar(Long id) {
 		return manager.find(Cozinha.class, id);
 	}

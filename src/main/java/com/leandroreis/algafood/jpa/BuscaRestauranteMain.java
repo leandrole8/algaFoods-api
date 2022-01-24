@@ -6,21 +6,21 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ApplicationContext;
 
 import com.leandroreis.algafood.AlgafoodApiApplication;
-import com.leandroreis.algafood.domain.model.Cozinha;
-import com.leandroreis.algafood.domain.repository.CozinhaRepository;
+import com.leandroreis.algafood.domain.model.Restaurante;
+import com.leandroreis.algafood.domain.repository.RestauranteRepository;
 
-public class BuscaCozinhaMain {
+public class BuscaRestauranteMain {
 	
 	public static void main(String[] args) {
 		ApplicationContext applicationContext = new SpringApplicationBuilder(AlgafoodApiApplication.class)
 				.web(WebApplicationType.NONE)
 				.run(args);
 		
-		CozinhaRepository cozinhaRepository = applicationContext.getBean(CozinhaRepository.class);
+		RestauranteRepository restauranteRepository = applicationContext.getBean(RestauranteRepository.class);
 		
-		Cozinha cozinha = cozinhaRepository.buscar(1L);
+		Restaurante restaurante = restauranteRepository.buscar(1L);
 		
-			System.out.println(cozinha.getNome());
+			System.out.println(restaurante.getNome());
 		
 	}
 
