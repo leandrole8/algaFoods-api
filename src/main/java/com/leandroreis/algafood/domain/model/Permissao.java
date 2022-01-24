@@ -9,10 +9,10 @@ import javax.persistence.Id;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Data
 @Entity
-public class Cozinha {
+public class Permissao {
 	
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -20,6 +20,9 @@ public class Cozinha {
 	private Long id;
 	
 	@Column(nullable = false)
-	private String nome;	
+	private String nome;
+	
+	@Column(nullable = false)
+	private String descricao;
 
 }
