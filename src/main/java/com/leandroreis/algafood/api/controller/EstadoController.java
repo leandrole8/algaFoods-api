@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.leandroreis.algafood.domain.model.Estado;
 import com.leandroreis.algafood.domain.repository.EstadoRepository;
+import com.leandroreis.algafood.domain.service.EstadoService;
 
 @RestController
 @RequestMapping("/estados")
@@ -26,6 +27,9 @@ public class EstadoController {
 
 	@Autowired
 	private EstadoRepository estadoRepository;
+	
+	@Autowired
+	private EstadoService estadoService;
 	
 	@GetMapping
 	public List<Estado> listar(){
@@ -45,7 +49,7 @@ public class EstadoController {
 	@ResponseStatus(HttpStatus.CREATED)
 	@PostMapping
 	public Estado adicionar(@RequestBody Estado estado) {
-		return estadoRepository.salvar(estado);
+		return estadoService.salvar(estado);
 	}
 	
 	@PutMapping("/{id}")
