@@ -30,7 +30,7 @@ public class CozinhaRepositoryImpl implements CozinhaRepository{
 		return manager.merge(cozinha);
 	}
 
-	@Transactional
+
 	@Override
 	public Cozinha buscar(Long id) {
 		return manager.find(Cozinha.class, id);

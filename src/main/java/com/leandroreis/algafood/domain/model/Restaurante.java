@@ -13,24 +13,24 @@ import javax.persistence.ManyToOne;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-@Entity
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@Entity
 public class Restaurante {
 
+	@EqualsAndHashCode.Include
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@EqualsAndHashCode.Include
 	private Long id;
 	
 	@Column(nullable = false)
 	private String nome;
 	
-	@Column(name= "Taxa_frete", nullable = false)
+	@Column(name = "taxa_frete", nullable = false)
 	private BigDecimal taxaFrete;
 	
 	@ManyToOne
-	@JoinColumn(nullable = false)
+	@JoinColumn(name = "cozinha_id", nullable = false)
 	private Cozinha cozinha;
 	
 }
