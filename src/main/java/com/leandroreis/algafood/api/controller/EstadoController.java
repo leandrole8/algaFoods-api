@@ -72,7 +72,7 @@ public class EstadoController {
 			Estado estado = estadoRepository.buscar(id);
 			
 			if(estado != null) {
-				estadoRepository.remover(estado);
+				estadoService.;
 				return ResponseEntity.noContent().build();
 			}
 			return ResponseEntity.notFound().build();
