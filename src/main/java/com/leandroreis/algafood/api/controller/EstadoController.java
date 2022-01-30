@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.leandroreis.algafood.domain.exception.EntidadeEmUsoException;
+import com.leandroreis.algafood.domain.exception.EntidadeNaoEncontradaException;
 import com.leandroreis.algafood.domain.model.Estado;
 import com.leandroreis.algafood.domain.repository.EstadoRepository;
 import com.leandroreis.algafood.domain.service.EstadoService;
@@ -67,18 +69,16 @@ public class EstadoController {
 	}
 	
 	@DeleteMapping("/{id}")
-	public ResponseEntity<Estado> excluir(@PathVariable Long id){
+	public ResponseEntity<?> excluir(@PathVariable Long id){
 		try {
-			Estado estado = estadoRepository.buscar(id);
+			estadoService.excluir(id);
+			return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
 			
-			if(estado != null) {
-				estadoService.;
-				return ResponseEntity.noContent().build();
-			}
+		} catch (EntidadeNaoEncontradaException e) {
 			return ResponseEntity.notFound().build();
 			
-		} catch(DataIntegrityViolationException e) {
-			return ResponseEntity.status(HttpStatus.CONFLICT).build();
+		} catch (EntidadeEmUsoException e) {
+			return ResponseEntity.status(HttpStatus.CONFLICT).body(e.getMessage());
 		}
 	}
 }
