@@ -3,6 +3,7 @@ package com.leandroreis.algafood.api.controller;
 import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,15 +37,15 @@ public class RestauranteController {
 	
 	@GetMapping
 	public List<Restaurante> listar(){
-		return restauranteRepository.listar();
+		return restauranteRepository.findAll();
 	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Restaurante> buscar(@PathVariable Long id) {
-		Restaurante restaurante = restauranteRepository.buscar(id);
+		Optional<Restaurante> restaurante = restauranteRepository.findById(id);
 		
-		if(restaurante != null) {
-			return ResponseEntity.ok(restaurante);
+		if(restaurante.isPresent()) {
+			return ResponseEntity.ok(restaurante.get());
 		}
 		return ResponseEntity.notFound().build();
 	}
@@ -52,7 +53,7 @@ public class RestauranteController {
 	@PostMapping
 	public ResponseEntity<?> adicionar(@RequestBody Restaurante restaurante){
 		try {
-			restaurante = restauranteRepository.salvar(restaurante);
+			restaurante = restauranteService.salvar(restaurante);
 			return ResponseEntity.status(HttpStatus.CREATED).body(restaurante);
 			
 		} catch (EntidadeNaoEncontradaException e) {
@@ -65,7 +66,8 @@ public class RestauranteController {
 	public ResponseEntity<?> atualizar(@PathVariable Long restauranteId,
 			@RequestBody Restaurante restaurante) {
 		try {
-			Restaurante restauranteAtual = restauranteRepository.buscar(restauranteId);
+			Restaurante restauranteAtual = restauranteRepository
+					.findById(restauranteId).orElse(null);
 			
 			if (restauranteAtual != null) {
 				BeanUtils.copyProperties(restaurante, restauranteAtual, "id");
@@ -83,18 +85,20 @@ public class RestauranteController {
 	}
 	
 	@PatchMapping("/{restauranteId}")
-	public ResponseEntity<?> atualizarParcial(@PathVariable Long restauranteId, 
-			@RequestBody Map<String, Object> campos){
-		Restaurante restauranteAtual = restauranteRepository.buscar(restauranteId);
+	public ResponseEntity<?> atualizarParcial(@PathVariable Long restauranteId,
+			@RequestBody Map<String, Object> campos) {
+		Restaurante restauranteAtual = restauranteRepository
+				.findById(restauranteId).orElse(null);
 		
-		if(restauranteAtual == null) {
+		if (restauranteAtual == null) {
 			return ResponseEntity.notFound().build();
 		}
 		
 		merge(campos, restauranteAtual);
+		
 		return atualizar(restauranteId, restauranteAtual);
 	}
-	
+
 	private void merge(Map<String, Object> dadosOrigem, Restaurante restauranteDestino) {
 		ObjectMapper objectMapper = new ObjectMapper();
 		Restaurante restauranteOrigem = objectMapper.convertValue(dadosOrigem, Restaurante.class);
@@ -104,6 +108,8 @@ public class RestauranteController {
 			field.setAccessible(true);
 			
 			Object novoValor = ReflectionUtils.getField(field, restauranteOrigem);
+			
+//			System.out.println(nomePropriedade + " = " + valorPropriedade + " = " + novoValor);
 			
 			ReflectionUtils.setField(field, restauranteDestino, novoValor);
 		});
